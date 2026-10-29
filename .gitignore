@@ -1,0 +1,14 @@
+/instructor/
+
+# Xcode user state and generated builds
+xcuserdata/
+*.xcuserstate
+/DerivedData/
+/build/
+
+# Swift Package Manager build artifacts
+/.build/
+/.swiftpm/
+
+# macOS metadata
+.DS_Store
