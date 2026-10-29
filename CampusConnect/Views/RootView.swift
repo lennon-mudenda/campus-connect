@@ -17,6 +17,7 @@ struct RootView: View {
 }
 struct EventRow: View {
     let event: CampusEvent
+    var showsChevron = false
     @EnvironmentObject var store: CampusStore
     var body: some View {
         NavigationLink(destination: EventDetailView(eventID: event.id)) {
@@ -28,7 +29,12 @@ struct EventRow: View {
                     Text(event.start.formatted(date: .abbreviated, time: .shortened)).font(.caption).foregroundStyle(Color.accentColor)
                 }
                 Spacer()
-                Image(systemName: "chevron.right").foregroundStyle(.tertiary)
+                if showsChevron {
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.tertiary)
+                        .accessibilityHidden(true)
+                }
             }.padding(.vertical, 7)
         }
     }
@@ -50,7 +56,7 @@ struct HomeView: View {
                     MetricCard(title: "Completed", value: "\(store.completionRate())%", symbol: "checkmark.seal")
                 }
                 Text("Coming up").font(.title2.bold())
-                ForEach(store.upcoming().prefix(5)) { event in EventRow(event: event) }
+                ForEach(store.upcoming().prefix(5)) { event in EventRow(event: event, showsChevron: true) }
                 if store.upcoming().isEmpty { ContentUnavailableView("No upcoming events", systemImage: "calendar") }
             }.padding(20)
         }.background(Color(.systemGroupedBackground)).navigationTitle("CampusConnect").onAppear { store.refreshDashboard() }.toolbar { Button { store.refreshDashboard() } label: { Image(systemName: "arrow.clockwise") } }
